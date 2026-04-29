@@ -25,26 +25,47 @@ const exportFormats = [
   { id: "excel", label: "Excel", icon: FileSpreadsheet },
 ]
 
-// Generate fake leads data
+// Generate fake leads data with Gmail emails and LinkedIn profiles
 const generateLeads = (count: number, keyword: string, location: string, source: string, emailMandatory: boolean) => {
-  const firstNames = ["John", "Sarah", "Mike", "Emily", "David", "Lisa", "James", "Anna", "Robert", "Maria", "Raj", "Priya", "Ahmed", "Chen", "Yuki"]
-  const lastNames = ["Smith", "Johnson", "Williams", "Brown", "Jones", "Miller", "Davis", "Wilson", "Moore", "Taylor", "Patel", "Kumar", "Khan", "Wang", "Tanaka"]
-  const domains = ["gmail.com", "yahoo.com", "hotmail.com", "outlook.com", "business.com", "company.co"]
+  const firstNames = ["John", "Sarah", "Mike", "Emily", "David", "Lisa", "James", "Anna", "Robert", "Maria", "Raj", "Priya", "Ahmed", "Chen", "Yuki", "Alex", "Emma", "Liam", "Sophia", "Noah"]
+  const lastNames = ["Smith", "Johnson", "Williams", "Brown", "Jones", "Miller", "Davis", "Wilson", "Moore", "Taylor", "Patel", "Kumar", "Khan", "Wang", "Tanaka", "Garcia", "Rodriguez", "Martinez", "Lee", "Anderson"]
+  const titles = ["Manager", "Director", "Specialist", "Executive", "Officer", "Consultant", "Lead", "Analyst", "Coordinator", "Owner"]
+  const industries = ["Technology", "Marketing", "Sales", "Business Development", "Digital", "E-commerce", "Service", "Retail", "Finance", "Consulting"]
   
   const leads = []
+  const usedEmails = new Set<string>()
+  
   for (let i = 0; i < count; i++) {
     const firstName = firstNames[Math.floor(Math.random() * firstNames.length)]
     const lastName = lastNames[Math.floor(Math.random() * lastNames.length)]
-    const domain = domains[Math.floor(Math.random() * domains.length)]
-    const hasEmail = emailMandatory ? true : Math.random() > 0.3
+    
+    // Generate unique Gmail address
+    let emailBase = `${firstName.toLowerCase()}.${lastName.toLowerCase()}`
+    let emailAddress = `${emailBase}@gmail.com`
+    
+    // Ensure unique emails
+    if (usedEmails.has(emailAddress)) {
+      emailAddress = `${emailBase}${Math.floor(Math.random() * 10000)}@gmail.com`
+    }
+    usedEmails.add(emailAddress)
+    
+    // Generate LinkedIn profile
+    const linkedinUsername = `${firstName.toLowerCase()}-${lastName.toLowerCase()}-${Math.floor(Math.random() * 1000)}`
+    const linkedinProfile = `linkedin.com/in/${linkedinUsername}`
+    const title = titles[Math.floor(Math.random() * titles.length)]
+    const industry = industries[Math.floor(Math.random() * industries.length)]
     
     leads.push({
       "S.No": i + 1,
       "Name": `${firstName} ${lastName}`,
-      "Email": hasEmail ? `${firstName.toLowerCase()}.${lastName.toLowerCase()}@${domain}` : "",
+      "Email": emailAddress,
+      "Email Verified": "✓ Yes",
       "Phone": `+1${Math.floor(Math.random() * 9000000000 + 1000000000)}`,
       "Business": `${keyword} ${["Store", "Shop", "Hub", "Center", "Place"][Math.floor(Math.random() * 5)]}`,
-      "Location": location || ["New York", "Los Angeles", "Chicago", "Houston", "Miami"][Math.floor(Math.random() * 5)],
+      "Location": location || ["New York", "Los Angeles", "Chicago", "Houston", "Miami", "Dallas", "Seattle", "Boston"][Math.floor(Math.random() * 8)],
+      "LinkedIn Profile": linkedinProfile,
+      "Job Title": title,
+      "Industry": industry,
       "Source": source,
       "Website": `www.${firstName.toLowerCase()}${lastName.toLowerCase()}.com`,
     })
