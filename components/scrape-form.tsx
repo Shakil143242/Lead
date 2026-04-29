@@ -200,63 +200,63 @@ export function ScrapeForm() {
   }
 
   return (
-    <Card className="w-full max-w-2xl mx-auto shadow-xl border-0 bg-card/80 backdrop-blur-sm">
+    <Card className="w-full shadow-lg border-0 bg-white">
       <CardHeader className="text-center pb-2">
-        <CardTitle className="text-3xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+        <CardTitle className="text-3xl font-bold text-blue-600">
           DataScraper
         </CardTitle>
-        <CardDescription className="text-base mt-2 text-muted-foreground">
+        <CardDescription className="text-base mt-2 text-gray-600">
           Enter the search details and click on Scrape button
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6 pt-4">
         {/* Keyword Input */}
         <div className="space-y-2">
-          <Label htmlFor="keyword" className="text-sm font-medium">
-            Searching Keyword <span className="text-destructive">*</span>
+          <Label htmlFor="keyword" className="text-sm font-medium text-gray-700">
+            Searching Keyword <span className="text-red-500">*</span>
           </Label>
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
             <Input
               id="keyword"
               placeholder="e.g., Coffee Shop"
               value={keyword}
               onChange={(e) => setKeyword(e.target.value)}
-              className="pl-10 h-11 bg-input border-border focus:ring-2 focus:ring-primary/20"
+              className="pl-10 h-11 bg-gray-50 border-gray-200 focus:ring-2 focus:ring-blue-500 text-gray-900"
             />
           </div>
           {errors.keyword && (
-            <p className="text-sm text-destructive">{errors.keyword}</p>
+            <p className="text-sm text-red-600">{errors.keyword}</p>
           )}
-          <p className="text-xs text-muted-foreground">Please enter no more than two words.</p>
+          <p className="text-xs text-gray-500">Please enter no more than two words.</p>
         </div>
 
         {/* Location Input */}
         <div className="space-y-2">
-          <Label htmlFor="location" className="text-sm font-medium">
-            Location <span className="text-muted-foreground">(Optional)</span>
+          <Label htmlFor="location" className="text-sm font-medium text-gray-700">
+            Location <span className="text-gray-500">(Optional)</span>
           </Label>
           <div className="relative">
-            <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
             <Input
               id="location"
               placeholder="e.g., New York"
               value={location}
               onChange={(e) => setLocation(e.target.value)}
-              className="pl-10 h-11 bg-input border-border focus:ring-2 focus:ring-primary/20"
+              className="pl-10 h-11 bg-gray-50 border-gray-200 focus:ring-2 focus:ring-blue-500 text-gray-900"
             />
           </div>
           {errors.location && (
-            <p className="text-sm text-destructive">{errors.location}</p>
+            <p className="text-sm text-red-600">{errors.location}</p>
           )}
-          <p className="text-xs text-muted-foreground">Please enter no more than two words.</p>
+          <p className="text-xs text-gray-500">Please enter no more than two words.</p>
         </div>
 
         {/* Leads Count Slider */}
         <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <Label className="text-sm font-medium">Leads Count</Label>
-            <span className="text-sm font-semibold text-primary bg-primary/10 px-3 py-1 rounded-full">
+            <Label className="text-sm font-medium text-gray-700">Leads Count</Label>
+            <span className="text-sm font-semibold text-blue-600 bg-blue-50 px-3 py-1 rounded-full">
               {leadsCount[0]}
             </span>
           </div>
@@ -268,20 +268,20 @@ export function ScrapeForm() {
             step={1}
             className="w-full"
           />
-          <p className="text-xs text-muted-foreground">Please enter a number between 1 and 100.</p>
+          <p className="text-xs text-gray-500">Please enter a number between 1 and 100.</p>
         </div>
 
         {/* Email Mandatory Checkbox */}
-        <div className="flex items-center space-x-3 p-3 rounded-lg bg-muted/50 border border-border">
+        <div className="flex items-center space-x-3 p-3 rounded-lg bg-gray-50 border border-gray-200">
           <Checkbox
             id="email-mandatory"
             checked={emailMandatory}
             onCheckedChange={(checked) => setEmailMandatory(checked as boolean)}
-            className="data-[state=checked]:bg-primary data-[state=checked]:border-primary"
+            className="data-[state=checked]:bg-blue-600 data-[state=checked]:border-blue-600"
           />
           <Label
             htmlFor="email-mandatory"
-            className="text-sm font-medium cursor-pointer select-none"
+            className="text-sm font-medium cursor-pointer select-none text-gray-700"
           >
             Email Is Mandatory
           </Label>
@@ -289,8 +289,8 @@ export function ScrapeForm() {
 
         {/* Source Selection */}
         <div className="space-y-3">
-          <Label className="text-sm font-medium">
-            Source <span className="text-destructive">*</span>
+          <Label className="text-sm font-medium text-gray-700">
+            Source <span className="text-red-500">*</span>
           </Label>
           <RadioGroup
             value={source}
@@ -305,8 +305,8 @@ export function ScrapeForm() {
                   htmlFor={s.id}
                   className={`flex items-center gap-2 p-3 rounded-lg border-2 cursor-pointer transition-all duration-200 ${
                     source === s.id
-                      ? "border-primary bg-primary/5 text-primary"
-                      : "border-border hover:border-primary/50 hover:bg-muted/50"
+                      ? "border-blue-600 bg-blue-50 text-blue-600"
+                      : "border-gray-200 hover:border-blue-300 hover:bg-gray-50"
                   }`}
                 >
                   <RadioGroupItem value={s.id} id={s.id} className="sr-only" />
@@ -317,14 +317,14 @@ export function ScrapeForm() {
             })}
           </RadioGroup>
           {errors.source && (
-            <p className="text-sm text-destructive">{errors.source}</p>
+            <p className="text-sm text-red-600">{errors.source}</p>
           )}
         </div>
 
         {/* Export Format Selection */}
         <div className="space-y-3">
-          <Label className="text-sm font-medium">
-            Export File Format <span className="text-destructive">*</span>
+          <Label className="text-sm font-medium text-gray-700">
+            Export File Format <span className="text-red-500">*</span>
           </Label>
           <RadioGroup
             value={exportFormat}
@@ -339,8 +339,8 @@ export function ScrapeForm() {
                   htmlFor={`format-${f.id}`}
                   className={`flex items-center justify-center gap-2 p-3 rounded-lg border-2 cursor-pointer transition-all duration-200 ${
                     exportFormat === f.id
-                      ? "border-primary bg-primary/5 text-primary"
-                      : "border-border hover:border-primary/50 hover:bg-muted/50"
+                      ? "border-blue-600 bg-blue-50 text-blue-600"
+                      : "border-gray-200 hover:border-blue-300 hover:bg-gray-50"
                   }`}
                 >
                   <RadioGroupItem value={f.id} id={`format-${f.id}`} className="sr-only" />
@@ -351,15 +351,15 @@ export function ScrapeForm() {
             })}
           </RadioGroup>
           {errors.exportFormat && (
-            <p className="text-sm text-destructive">{errors.exportFormat}</p>
+            <p className="text-sm text-red-600">{errors.exportFormat}</p>
           )}
         </div>
 
         {/* Progress Bar */}
         <div className="space-y-2">
           <div className="flex items-center justify-between text-sm">
-            <span className="text-muted-foreground">Progress</span>
-            <span className="font-medium text-primary">{Math.round(progress)}%</span>
+            <span className="text-gray-600">Progress</span>
+            <span className="font-medium text-blue-600">{Math.round(progress)}%</span>
           </div>
           <Progress value={progress} className="h-2" />
         </div>
@@ -369,7 +369,7 @@ export function ScrapeForm() {
           <Button
             onClick={handleScrape}
             disabled={isLoading}
-            className="flex-1 h-12 text-base font-semibold bg-gradient-to-r from-primary to-accent hover:opacity-90 transition-opacity"
+            className="flex-1 h-12 text-base font-semibold bg-blue-600 hover:bg-blue-700 text-white transition-colors"
           >
             {isLoading ? (
               <>
@@ -387,7 +387,7 @@ export function ScrapeForm() {
             <Button
               onClick={handleDownload}
               variant="outline"
-              className="h-12 px-6 border-primary text-primary hover:bg-primary hover:text-primary-foreground"
+              className="h-12 px-6 border-blue-600 text-blue-600 hover:bg-blue-50"
             >
               <Download className="mr-2 h-5 w-5" />
               Download
