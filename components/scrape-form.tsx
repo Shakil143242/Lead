@@ -139,29 +139,55 @@ export function ScrapeForm() {
     setIsComplete(false)
     setLeadsData([])
     
-    // Fast progress simulation
-    let currentProgress = 0
-    const interval = setInterval(() => {
-      currentProgress += Math.random() * 20 + 10
-      if (currentProgress >= 100) {
-        currentProgress = 100
-        clearInterval(interval)
-        
-        // Generate leads and auto download
-        const data = generateLeads(leadsCount[0], keyword, location, source, emailMandatory)
-        setLeadsData(data)
-        setIsComplete(true)
-        setIsLoading(false)
-        
-        // Auto download
-        if (exportFormat === "excel") {
-          downloadExcel(data)
-        } else {
-          downloadText(data)
-        }
+    try {
+      // Step 1: Generate leads
+      setProgress(10)
+      const initialLeads = generateLeads(leadsCount[0], keyword, location, source, emailMandatory)
+      
+      // Step 2: Extract emails for verification
+      const emails = initialLeads.map((lead: any) => lead.Email)
+      setProgress(30)
+      
+      // Step 3: Verify emails in batch
+      const verifyResponse = await fetch('/api/verify-email', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ emails }),
+      })
+      
+      setProgress(70)
+      
+      const verifyData = await verifyResponse.json()
+      
+      // Step 4: Mark verified emails in leads
+      const verifiedEmails = new Set(
+        verifyData.results
+          .filter((r: any) => r.verified)
+          .map((r: any) => r.email)
+      )
+      
+      const verifiedLeads = initialLeads.map((lead: any) => ({
+        ...lead,
+        "Email Verified": verifiedEmails.has(lead.Email) ? "✓ Verified" : "✗ Not Verified",
+      }))
+      
+      setLeadsData(verifiedLeads)
+      setProgress(100)
+      setIsComplete(true)
+      setIsLoading(false)
+      
+      // Step 5: Auto download
+      if (exportFormat === "excel") {
+        downloadExcel(verifiedLeads)
+      } else {
+        downloadText(verifiedLeads)
       }
-      setProgress(currentProgress)
-    }, 100)
+    } catch (error) {
+      console.error('Scraping error:', error)
+      setIsLoading(false)
+      setProgress(0)
+      setIsComplete(false)
+    }
   }
 
   const handleDownload = () => {
