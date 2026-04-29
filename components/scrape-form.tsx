@@ -21,7 +21,7 @@ const sources = [
 ]
 
 const exportFormats = [
-  { id: "text", label: "Text", icon: FileText },
+  { id: "csv", label: "CSV", icon: FileText },
   { id: "excel", label: "Excel", icon: FileSpreadsheet },
 ]
 
@@ -59,7 +59,6 @@ const generateLeads = (count: number, keyword: string, location: string, source:
       "S.No": i + 1,
       "Name": `${firstName} ${lastName}`,
       "Email": emailAddress,
-      "Email Verified": "✓ Yes",
       "Phone": `+1${Math.floor(Math.random() * 9000000000 + 1000000000)}`,
       "Business": `${keyword} ${["Store", "Shop", "Hub", "Center", "Place"][Math.floor(Math.random() * 5)]}`,
       "Location": location || ["New York", "Los Angeles", "Chicago", "Houston", "Miami", "Dallas", "Seattle", "Boston"][Math.floor(Math.random() * 8)],
@@ -118,15 +117,22 @@ export function ScrapeForm() {
     XLSX.writeFile(wb, `leads_${keyword.replace(/\s+/g, "_")}_${Date.now()}.xlsx`)
   }
 
-  const downloadText = (data: ReturnType<typeof generateLeads>) => {
-    const header = Object.keys(data[0]).join("\t")
-    const rows = data.map(row => Object.values(row).join("\t")).join("\n")
-    const content = `${header}\n${rows}`
-    const blob = new Blob([content], { type: "text/plain" })
+  const downloadCSV = (data: ReturnType<typeof generateLeads>) => {
+    if (data.length === 0) return
+    const headers = Object.keys(data[0])
+    const rows = data.map(row => 
+      headers.map(header => {
+        const value = row[header as keyof typeof row]
+        const stringValue = String(value)
+        return stringValue.includes(',') ? `"${stringValue}"` : stringValue
+      }).join(',')
+    )
+    const csvContent = [headers.join(','), ...rows].join('\n')
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" })
     const url = URL.createObjectURL(blob)
     const a = document.createElement("a")
     a.href = url
-    a.download = `leads_${keyword.replace(/\s+/g, "_")}_${Date.now()}.txt`
+    a.download = `leads_${keyword.replace(/\s+/g, "_")}_${Date.now()}.csv`
     a.click()
     URL.revokeObjectURL(url)
   }
@@ -179,8 +185,8 @@ export function ScrapeForm() {
       // Step 5: Auto download
       if (exportFormat === "excel") {
         downloadExcel(verifiedLeads)
-      } else {
-        downloadText(verifiedLeads)
+      } else if (exportFormat === "csv") {
+        downloadCSV(verifiedLeads)
       }
     } catch (error) {
       console.error('Scraping error:', error)
@@ -194,8 +200,8 @@ export function ScrapeForm() {
     if (leadsData.length === 0) return
     if (exportFormat === "excel") {
       downloadExcel(leadsData)
-    } else {
-      downloadText(leadsData)
+    } else if (exportFormat === "csv") {
+      downloadCSV(leadsData)
     }
   }
 
