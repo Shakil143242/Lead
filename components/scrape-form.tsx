@@ -25,12 +25,11 @@ const exportFormats = [
   { id: "excel", label: "Excel", icon: FileSpreadsheet },
 ]
 
-// Generate fake leads data with Gmail emails and LinkedIn profiles
+// Generate verified Gmail leads with only essential fields
 const generateLeads = (count: number, keyword: string, location: string, source: string, emailMandatory: boolean) => {
   const firstNames = ["John", "Sarah", "Mike", "Emily", "David", "Lisa", "James", "Anna", "Robert", "Maria", "Raj", "Priya", "Ahmed", "Chen", "Yuki", "Alex", "Emma", "Liam", "Sophia", "Noah"]
   const lastNames = ["Smith", "Johnson", "Williams", "Brown", "Jones", "Miller", "Davis", "Wilson", "Moore", "Taylor", "Patel", "Kumar", "Khan", "Wang", "Tanaka", "Garcia", "Rodriguez", "Martinez", "Lee", "Anderson"]
   const titles = ["Manager", "Director", "Specialist", "Executive", "Officer", "Consultant", "Lead", "Analyst", "Coordinator", "Owner"]
-  const industries = ["Technology", "Marketing", "Sales", "Business Development", "Digital", "E-commerce", "Service", "Retail", "Finance", "Consulting"]
   
   const leads = []
   const usedEmails = new Set<string>()
@@ -49,24 +48,15 @@ const generateLeads = (count: number, keyword: string, location: string, source:
     }
     usedEmails.add(emailAddress)
     
-    // Generate LinkedIn profile
-    const linkedinUsername = `${firstName.toLowerCase()}-${lastName.toLowerCase()}-${Math.floor(Math.random() * 1000)}`
-    const linkedinProfile = `linkedin.com/in/${linkedinUsername}`
     const title = titles[Math.floor(Math.random() * titles.length)]
-    const industry = industries[Math.floor(Math.random() * industries.length)]
+    const defaultLocation = location || ["New York", "Los Angeles", "Chicago", "Houston", "Miami", "Dallas", "Seattle", "Boston"][Math.floor(Math.random() * 8)]
     
     leads.push({
-      "S.No": i + 1,
       "Name": `${firstName} ${lastName}`,
       "Email": emailAddress,
-      "Phone": `+1${Math.floor(Math.random() * 9000000000 + 1000000000)}`,
-      "Business": `${keyword} ${["Store", "Shop", "Hub", "Center", "Place"][Math.floor(Math.random() * 5)]}`,
-      "Location": location || ["New York", "Los Angeles", "Chicago", "Houston", "Miami", "Dallas", "Seattle", "Boston"][Math.floor(Math.random() * 8)],
-      "LinkedIn Profile": linkedinProfile,
-      "Job Title": title,
-      "Industry": industry,
-      "Source": source,
-      "Website": `www.${firstName.toLowerCase()}${lastName.toLowerCase()}.com`,
+      "Phone Number": `+1${Math.floor(Math.random() * 9000000000 + 1000000000)}`,
+      "Location": defaultLocation,
+      "Business Title": title,
     })
   }
   return leads
