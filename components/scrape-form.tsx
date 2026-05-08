@@ -165,17 +165,16 @@ export function ScrapeForm() {
       
       const verifyData = await verifyResponse.json()
       
-      // Step 4: Mark verified emails in leads
+      // Step 4: Filter only verified leads
       const verifiedEmails = new Set(
         verifyData.results
           .filter((r: any) => r.verified)
           .map((r: any) => r.email)
       )
       
-      const verifiedLeads = initialLeads.map((lead: any) => ({
-        ...lead,
-        "Email Verified": verifiedEmails.has(lead.Email) ? "✓ Verified" : "✗ Not Verified",
-      }))
+      const verifiedLeads = initialLeads.filter((lead: any) => 
+        verifiedEmails.has(lead.Email)
+      )
       
       setLeadsData(verifiedLeads)
       setProgress(100)
